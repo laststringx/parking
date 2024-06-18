@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 @Data
 @NoArgsConstructor
 public class ParkingLevel {
@@ -30,6 +29,7 @@ public class ParkingLevel {
             ParkingSpot spot = ParkingSpot.builder()
                     .parkingStatus(ParkingStatus.FREE)
                     .id(i)
+                    .level(this.level)
                     .parkingType(parkingType).build();
             parkingSpots.add(spot);
         }
