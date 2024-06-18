@@ -1,17 +1,19 @@
 package com.laststringx.parking.service.impl;
 
 import com.laststringx.parking.dao.ParkingDao;
-import com.laststringx.parking.dto.Car;
-import com.laststringx.parking.dto.ParkingSpot;
-import com.laststringx.parking.dto.ParkingStatus;
-import com.laststringx.parking.dto.Vehicle;
+import com.laststringx.parking.dao.ParkingLot;
+import com.laststringx.parking.dto.*;
 import com.laststringx.parking.exceptions.DaoException;
 import com.laststringx.parking.response.ParkVehicleResponse;
 import com.laststringx.parking.response.ParkingLotResponse;
+import com.laststringx.parking.response.ParkingLotStatusResponse;
+import com.laststringx.parking.response.SearchVehicleResponse;
 import com.laststringx.parking.service.ParkingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -29,29 +31,6 @@ public class ParkingServiceImpl implements ParkingService {
             // HTTP code can be added =
             return new ParkingLotResponse(e.getMessage(), "failure");
         }
-    }
-
-    @Override
-    public ParkVehicleResponse parkVehicle(Vehicle vehicle) {
-        // check if vehicle is already parked
-        return null;
-    }
-
-    @Override
-    public ParkVehicleResponse parkCar(Car car) {
-        ParkingSpot parkedCarSpot = parkingDao.getParkingSpotByLicensePlateNumber(car.getLicensePlateNumber());
-        if(parkedCarSpot != null){
-            log.info("car with reg number {} already parked.", car.getLicensePlateNumber());
-            return new ParkVehicleResponse(car, "car is already parked at level : "+ parkedCarSpot.getLevel()+ " spot " + parkedCarSpot.getId(),"success");
-        }
-        ParkingSpot parkingSpot = parkingDao.getFreeParkingSpot();
-        if(parkingSpot == null){
-            return new ParkVehicleResponse(null, "no spaces to park", "failure");
-        }
-        parkingSpot.setParkingStatus(ParkingStatus.OCCUPIED);
-        parkingSpot.setVehicle(car);
-        parkingDao.saveParking(parkingSpot);
-        return new ParkVehicleResponse(car, "parked at level : " + parkingSpot.getLevel() + " spot : " + parkingSpot.getId(), "success");
     }
 
     @Override
@@ -83,6 +62,18 @@ public class ParkingServiceImpl implements ParkingService {
             return new ParkVehicleResponse(null, "Spot not found", "failure");
         }
         return null;
+    }
+
+    @Override
+    public ParkingLotStatusResponse getParkingStatus() {
+        ParkingLot parkingLot = parkingDao.getParkingLotInfo();
+        return new ParkingLotStatusResponse(parkingLot, "success");
+    }
+
+    @Override
+    public SearchVehicleResponse searchByColor(String color) {
+        List<Vehicle> vehicles = parkingDao.getVehicleByColor(color);
+        return new SearchVehicleResponse(vehicles, "success");
     }
 
 

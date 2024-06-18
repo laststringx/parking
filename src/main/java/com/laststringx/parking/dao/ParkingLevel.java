@@ -1,11 +1,11 @@
 package com.laststringx.parking.dao;
 
+import com.laststringx.parking.dto.CarSpot;
 import com.laststringx.parking.dto.ParkingSpot;
 import com.laststringx.parking.dto.ParkingStatus;
 import com.laststringx.parking.dto.ParkingType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class ParkingLevel {
         this.level = level;
         this.parkingSpace = totalSpace;
         parkingSpots = new ArrayList<>();
-        initParkingSpaces(ParkingType.NORMAL);
+        initParkingSpaces(ParkingType.CAR);
         // more parking types can be added which can be added
     }
 

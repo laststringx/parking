@@ -28,14 +28,18 @@ public class ParkingDaoImpl implements ParkingDao {
 
     }
 
-    @Override
-    public void removeParking(ParkingSpot parkingSpot) {
-
-    }
 
     @Override
-    public List<Car> getCarByColor(String color) {
-        return null;
+    public List<Vehicle> getVehicleByColor(String color) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        for(ParkingLevel parkingLevel : parkingLot.getParkingLevels()){
+            for(ParkingSpot parkingSpot : parkingLevel.getParkingSpots()){
+                if(parkingSpot.getVehicle()!=null && color.equalsIgnoreCase(parkingSpot.getVehicle().getColor())){
+                    vehicles.add(parkingSpot.getVehicle());
+                }
+            }
+        }
+        return vehicles;
     }
 
     @Override
@@ -75,10 +79,10 @@ public class ParkingDaoImpl implements ParkingDao {
     }
 
     @Override
-    public ParkingSpot getFreeParkingSpot() {
+    public ParkingSpot getFreeParkingSpot(ParkingType parkingType) {
         for (ParkingLevel parkingLevel : parkingLot.getParkingLevels()){
             for(ParkingSpot parkingSpot : parkingLevel.getParkingSpots()){
-                if(parkingSpot.getParkingStatus() == ParkingStatus.FREE){
+                if(parkingSpot.getParkingStatus() == ParkingStatus.FREE && parkingType.equals(parkingSpot.getParkingType())){
                     return parkingSpot;
                 }
             }

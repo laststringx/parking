@@ -1,7 +1,7 @@
 package com.laststringx.parking.dto;
 
 public enum ParkingType {
-    NORMAL
+    CAR
     // extensible to LMV, HEavy vehicles, 2 wheelers
     // handicapped parking and lost more
 }
